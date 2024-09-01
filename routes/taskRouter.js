@@ -41,5 +41,32 @@ taskRouter.get("/", async (req, res) => {
     res.status(500).json({ message: "some error occurred", error });
   }
 });
+taskRouter.put("/updateStatus", async (req, res) => {
+  const id = req.query.id;
+  const newStatus = req.body.status;
+  if (!id) {
+    res.status(400).json({ error: "ID is required" });
+  }
+  if (!newStatus) {
+    res.status(400).json({ error: "Status is required" });
+  }
+  try {
+    const updatedTask = await Task.findOneAndUpdate(
+      { id },
+      {
+        $set: { status: newStatus },
+      },
+      { new: true }
+    );
+    if (updatedTask) {
+      res.status(200).json({ message: "Task updated", updatedTask });
+    } else {
+      res.status(400).json({ error: "Invalid Id" });
+    }
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = taskRouter;
