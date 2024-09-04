@@ -6,7 +6,7 @@ const Task = require("../models/taskModel");
 const taskRouter = express.Router();
 
 const taskSchema = z.object({
-  title: z.string(),
+  name: z.string(),
   summary: z.string(),
   assignee: z.string(),
   priority: z.string(),
